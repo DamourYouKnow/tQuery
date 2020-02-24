@@ -1,3 +1,5 @@
+type HTMLInputs = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+
 class Selector<SelectedElemT extends HTMLElement> {
     private _elem: SelectedElemT;
 
@@ -45,11 +47,19 @@ class Selector<SelectedElemT extends HTMLElement> {
 
     public label(): HTMLLabelElement {
         let labels = Array.from(
-            this._elem.getElementsByTagName('label')
+            document.body.getElementsByTagName('label')
         ) as HTMLLabelElement[];
         labels = labels.filter((l) => l.getAttribute('for') == this._elem.id);
         if (labels.length === 0) throw Error('No matching label');
         return labels[0];
+    }
+
+    public inputs(): HTMLInputs[] {
+        return [
+            ...Array.from(this._elem.getElementsByTagName('input')),
+            ...Array.from(this._elem.getElementsByTagName('select')),
+            ...Array.from(this._elem.getElementsByTagName('textarea'))
+        ];
     }
 }
 
